@@ -14,10 +14,10 @@ extension TargetDependency {
 }
 
 extension TargetDependency.Module {
-    public static let domain = TargetDependency.project(target: "Domain", path: .relativeToRoot("TuistSample/Domain"))
-    public static let presentation = TargetDependency.project(target: "Presentation", path: .relativeToRoot("TuistSample/Presentation"))
-    public static let repository = TargetDependency.project(target: "Repository", path: .relativeToRoot("TuistSample/Repository"))
-    public static let service = TargetDependency.project(target: "Service", path: .relativeToRoot("TuistSample/Service"))
-    public static let util = TargetDependency.project(target: "Util", path: .relativeToRoot("TuistSample/Util"))
-    public static let thirdPartyLib = TargetDependency.project(target: "ThirdPartyLib", path: .relativeToRoot("TuistSample/ThirdPartyLib"))
+    public static let domain = TargetDependency.project(target: "Domain", path: .relativeToRoot("HowMuchCoin/Domain"))
+    public static let presentation = TargetDependency.project(target: "Presentation", path: .relativeToRoot("HowMuchCoin/Presentation"))
+    public static let repository = TargetDependency.project(target: "Repository", path: .relativeToRoot("HowMuchCoin/Repository"))
+    public static let service = TargetDependency.project(target: "Service", path: .relativeToRoot("HowMuchCoin/Service"))
+    public static let util = TargetDependency.project(target: "Util", path: .relativeToRoot("HowMuchCoin/Util"))
+    public static let thirdPartyLib = TargetDependency.project(target: "ThirdPartyLib", path: .relativeToRoot("HowMuchCoin/ThirdPartyLib"))
 }

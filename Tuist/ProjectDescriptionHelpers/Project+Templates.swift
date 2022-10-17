@@ -8,7 +8,7 @@ import UtilityPlugin
 ///
 public extension Project {
 
-    static let bundleId = "com.test.tuistSample"
+    static let bundleId = "com.test.HowMuchCoin"
 
     // MARK: make App
 

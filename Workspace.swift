@@ -8,14 +8,14 @@
 import ProjectDescription
 
 let workspace = Workspace(
-    name: "TuistSample",
+    name: "HowMuchCoin",
     projects: [
-        "TuistSample/App",
-        "TuistSample/Domain",
-        "TuistSample/Presentation",
-        "TuistSample/Repository",
-        "TuistSample/Service",
-        "TuistSample/Util",
-        "TuistSample/ThirdPartyLib"
+        "HowMuchCoin/App",
+        "HowMuchCoin/Domain",
+        "HowMuchCoin/Presentation",
+        "HowMuchCoin/Repository",
+        "HowMuchCoin/Service",
+        "HowMuchCoin/Util",
+        "HowMuchCoin/ThirdPartyLib"
     ]
 )
