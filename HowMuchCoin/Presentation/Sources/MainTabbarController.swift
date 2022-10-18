@@ -27,9 +27,7 @@ public class MainTabbarController: UITabBarController {
         super.viewDidLoad()
         delegate = self
 
-        self.tabBar.backgroundColor = .white
-        self.tabBar.unselectedItemTintColor = .black
-        self.tabBar.tintColor = .black
+        setTabBarDesign()
     }
 
     public override func viewWillAppear(_ animated: Bool) {
