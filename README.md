@@ -1,44 +1,9 @@
-# tuistSample
-tuist를 활용한 clean architecture
+# HowMuchCoin
+암호화폐 가격 실시간 조회
 
-### Usage
+### Architecture
 
-1. tuist 설치 -> curl -Ls https://install.tuist.io | bash
-
-2. tuist clean -> tuist fetch -> tuist generate
-
-3. tuist 수정 시 tuist edit
-
-
-### Directory
-```
-.
-├── Plugins
-│   └── UtilityPlugin
-├── Project.swift
-├── README.md
-├── Support
-│   └── Info.plist
-├── Tuist
-│   ├── Config.swift
-│   ├── Dependencies
-│   ├── Dependencies.swift
-│   └── ProjectDescriptionHelpers
-├── TuistSample
-│   ├── App
-│   ├── Domain
-│   ├── Presentation
-│   ├── Repository
-│   ├── Service
-│   ├── ThirdPartyLib
-│   └── Util
-├── TuistSample.xcworkspace
-│   ├── contents.xcworkspacedata
-│   ├── xcshareddata
-│   └── xcuserdata
-├── Workspace.swift
-└── graph.png
-```
+clean architecture + MVVM
 
 ### Dependency
 SPM
