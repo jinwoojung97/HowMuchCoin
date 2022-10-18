@@ -6,10 +6,18 @@
 //
 
 import UIKit
+import Domain
+import Repository
+import Presentation
+import Util
+import Service
+import ThirdPartyLib
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
+    var appDIContainer = AppDIContainer()
+    var appCoordinator: AppCordinator?
 
     func scene(
         _ scene: UIScene,
@@ -17,6 +25,16 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         options connectionOptions: UIScene.ConnectionOptions
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
+        let window = UIWindow(windowScene: scene)
+        
+        let vc = MainTabbarController()
+        window.rootViewController = vc
+        
+        appCoordinator = AppCordinator(tabbarController: vc, appDIContainer: appDIContainer)
+        appCoordinator?.start()
+        
+        self.window = window
+        window.makeKeyAndVisible()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}
