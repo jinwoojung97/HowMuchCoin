@@ -47,25 +47,25 @@ public struct Quotes: Codable{
 
 public struct PriceInfo: Codable {
     public var price: Double // 현재 가격
-    public var market_cap: Double // 총 시가
-    public var volume_24h: Double // 거래량(24h)
-    public var percent_change_24h: Double // 변동(24h)
-    public var percent_change_7d: Double // 변동(7d)
+    public var marketCap: Double // 총 시가
+    public var volume24h: Double // 거래량(24h)
+    public var percentChange24h: Double // 변동(24h)
+    public var percentChange7d: Double // 변동(7d)
 
     enum CodingKeys: String, CodingKey{
         case price
-        case market_cap
-        case volume_24h
-        case percent_change_24h
-        case percent_change_7d
+        case marketCap = "market_cap"
+        case volume24h = "volume_24h"
+        case percentChange24h = "percent_change_24h"
+        case percentChange7d = "percent_change_7d"
     }
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         price = try container.decode(Double.self, forKey: .price).decimalRound()
-        market_cap = try container.decode(Double.self, forKey: .market_cap).decimalRound()
-        volume_24h = try container.decode(Double.self, forKey: .volume_24h).decimalRound()
-        percent_change_24h = try container.decode(Double.self, forKey: .percent_change_24h).decimalRound()
-        percent_change_7d = try container.decode(Double.self, forKey: .percent_change_7d).decimalRound()
+        marketCap = try container.decode(Double.self, forKey: .marketCap).decimalRound()
+        volume24h = try container.decode(Double.self, forKey: .volume24h).decimalRound()
+        percentChange24h = try container.decode(Double.self, forKey: .percentChange24h).decimalRound()
+        percentChange7d = try container.decode(Double.self, forKey: .percentChange7d).decimalRound()
     }
 }
