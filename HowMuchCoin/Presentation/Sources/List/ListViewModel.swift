@@ -18,8 +18,13 @@ public class ListViewModel {
     }
 
     func fetchCoinList() {
-        fetchCoinListUseCase.execute{ list in
-            Log.d(list)
+        fetchCoinListUseCase.execute{ result in
+            switch result {
+            case .success(let list):
+                Log.d(list)
+            case .failure(let error):
+                Log.e(error.localizedDescription)
+            }
         }
     }
 }

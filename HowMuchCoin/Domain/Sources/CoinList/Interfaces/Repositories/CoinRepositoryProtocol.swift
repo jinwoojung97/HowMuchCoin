@@ -8,5 +8,5 @@
 import Foundation
 
 public protocol CoinRepositoryProtocol {
-    func fetchCoinList(completion: @escaping ([Coin]) -> Void)
+    func fetchCoinList(completion: @escaping (Result<[Coin], Error>) -> Void)
 }

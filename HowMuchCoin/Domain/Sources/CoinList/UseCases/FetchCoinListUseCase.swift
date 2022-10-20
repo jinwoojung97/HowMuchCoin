@@ -8,7 +8,7 @@
 import Foundation
 
 public protocol FetchCoinListUseCase {
-    func execute(completion: @escaping ([Coin]) -> Void)
+    func execute(completion: @escaping (Result<[Coin], Error>) -> Void)
 }
 
 public final class DefaultFetchCoinListUseCase: FetchCoinListUseCase {
@@ -18,7 +18,7 @@ public final class DefaultFetchCoinListUseCase: FetchCoinListUseCase {
         self.coinRepository = coinRepository
     }
 
-    public func execute(completion: @escaping ([Coin]) -> Void) {
+    public func execute(completion: @escaping (Result<[Coin], Error>) -> Void) {
         coinRepository.fetchCoinList{ completion($0) }
     }
 }
