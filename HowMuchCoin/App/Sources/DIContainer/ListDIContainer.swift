@@ -8,8 +8,21 @@
 import Foundation
 import Presentation
 import UIKit
+import Domain
+import Repository
 
 final class ListDIContainer {
+    
+    // MARK: Repository
+    func makeCoinRepository() -> CoinRepositoryProtocol {
+        return CoinRepository()
+    }
+
+    // MARK: UseCase
+    func makeFetchCoinListUseCase() -> FetchCoinListUseCase {
+        return DefaultFetchCoinListUseCase(coinRepository: makeCoinRepository())
+    }
+    
     // MARK: Coordinator
     func makeListCoordinator(navigationController: UINavigationController)-> ListCoordinator {
         return ListCoordinator(navigationController:navigationController, dependencies: self)
