@@ -8,7 +8,6 @@
 import Foundation
 import Util
 
-
 public struct Coin: Codable{
     public var id: String // id
     public var name: String // 종목
