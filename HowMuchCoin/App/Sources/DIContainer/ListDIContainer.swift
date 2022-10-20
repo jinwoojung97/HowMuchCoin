@@ -23,6 +23,11 @@ final class ListDIContainer {
         return DefaultFetchCoinListUseCase(coinRepository: makeCoinRepository())
     }
     
+    // MARK: ViewModel
+    func makeListViewModel() -> ListViewModel {
+        return ListViewModel(fetchCoinListUseCase: makeFetchCoinListUseCase())
+    }
+    
     // MARK: Coordinator
     func makeListCoordinator(navigationController: UINavigationController)-> ListCoordinator {
         return ListCoordinator(navigationController:navigationController, dependencies: self)
@@ -31,6 +36,6 @@ final class ListDIContainer {
 
 extension ListDIContainer: ListCoordinatorDependencies {
     func makeListViewController() -> ListViewController {
-        return ListViewController.create()
+        return ListViewController.create(viewModel: makeListViewModel())
     }
 }

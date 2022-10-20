@@ -21,7 +21,7 @@ struct CoinAPI: Networkable{
             switch ResponseData<[Coin]>.processModelResponse(result) {
             case .success(let model):
                 guard let model = model else { return }
-                let top100List = Array(model[..<99])
+                let top100List = Array(model[..<100])
                 return completion(.success(top100List))
             case .failure(let error):
                 return completion(.failure(error))
