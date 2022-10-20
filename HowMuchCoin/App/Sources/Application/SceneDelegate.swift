@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 import Domain
 import Repository
 import Presentation
@@ -26,17 +27,15 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
-        
+
         let vc = MainTabbarController()
         window.rootViewController = vc
-        
+
         appCoordinator = AppCordinator(tabbarController: vc, appDIContainer: appDIContainer)
         appCoordinator?.start()
-        
+
         self.window = window
         window.makeKeyAndVisible()
-        
-        RepositoryTest()
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {}

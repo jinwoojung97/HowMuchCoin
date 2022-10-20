@@ -6,9 +6,11 @@
 //
 
 import Foundation
+
+import Util
+
 import Moya
 import SwiftyJSON
-import Util
 
 struct ResponseData<Model: Codable> {
     

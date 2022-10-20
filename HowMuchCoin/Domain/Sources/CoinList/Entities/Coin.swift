@@ -6,6 +6,7 @@
 //
 
 import Foundation
+
 import Util
 
 public struct Coin: Codable{

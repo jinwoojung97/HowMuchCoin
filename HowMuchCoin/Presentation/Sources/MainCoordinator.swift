@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+
 import Util
 
 public protocol MainCoordinatorDependencies {
@@ -14,7 +15,7 @@ public protocol MainCoordinatorDependencies {
     func makeBookmakrCoordinator(navigationController: UINavigationController)-> BookmarkCoordinator
 }
 
-public class MainCoordinator: Coordinator {
+public final class MainCoordinator: Coordinator {
 
     public var childCoordinator: [Coordinator] = []
     public var tabbarController : MainTabbarController

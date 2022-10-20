@@ -6,12 +6,15 @@
 //
 
 import Foundation
-import Moya
-import Util
-import SwiftyJSON
-import Domain
 
-public class RepositoryTest{
+import Domain
+import Util
+
+import Moya
+import SwiftyJSON
+
+
+public final class RepositoryTest{
     public init() {
         /// api 요청 예시
 //        CoinAPI.reqFetchCoinList(){ result in

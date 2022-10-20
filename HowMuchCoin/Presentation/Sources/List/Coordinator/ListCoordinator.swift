@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+
 import Util
 
 // 의존성 주입을 위한 Coordinator Dependency
@@ -14,7 +15,7 @@ public protocol ListCoordinatorDependencies {
     func makeListViewController() -> ListViewController
 }
 
-public class ListCoordinator: Coordinator {
+public final class ListCoordinator: Coordinator {
     public var childCoordinator: [Coordinator] = []
     public var navigationController: UINavigationController
     private let dependencies: ListCoordinatorDependencies

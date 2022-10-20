@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+
 import RxSwift
 
 public final class ListViewController: UIViewController {
@@ -25,7 +26,5 @@ public final class ListViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        viewModel.fetchCoinList()
     }
 }

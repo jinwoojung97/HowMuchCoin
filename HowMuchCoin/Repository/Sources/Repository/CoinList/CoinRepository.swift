@@ -6,10 +6,11 @@
 //
 
 import Foundation
+
 import Domain
 import Util
 
-public class CoinRepository: CoinRepositoryProtocol {
+public final class CoinRepository: CoinRepositoryProtocol {
 
     public init() {}
     /// 코인리스트 가져오기

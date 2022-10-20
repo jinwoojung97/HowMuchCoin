@@ -6,15 +6,18 @@
 //
 
 import Foundation
+
 import Domain
 import Util
 
-public class ListViewModel {
+public final class ListViewModel {
 
     private var fetchCoinListUseCase : FetchCoinListUseCase
 
     public init(fetchCoinListUseCase: FetchCoinListUseCase){
         self.fetchCoinListUseCase = fetchCoinListUseCase
+        
+        fetchCoinList()
     }
 
     func fetchCoinList() {

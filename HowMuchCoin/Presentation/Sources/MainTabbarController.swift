@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+
 import Util
 
 public enum TabMenu: Int {
@@ -21,7 +22,7 @@ public enum TabMenu: Int {
     }
 }
 
-public class MainTabbarController: UITabBarController {
+public final class MainTabbarController: UITabBarController {
 
     public override func viewDidLoad() {
         super.viewDidLoad()

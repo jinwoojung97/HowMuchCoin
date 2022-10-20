@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+
 import Util
 
 // 의존성 주입을 위한 Coordinator Dependency
@@ -14,7 +15,7 @@ public protocol BookmarkCoordinatorDependencies {
     func makeBookmarkViewController() -> BookmarkViewController
 }
 
-public class BookmarkCoordinator: Coordinator {
+public final class BookmarkCoordinator: Coordinator {
     public var childCoordinator: [Coordinator] = []
     public var navigationController: UINavigationController
     private let dependencies: BookmarkCoordinatorDependencies
