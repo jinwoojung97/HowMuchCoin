@@ -13,5 +13,6 @@ let project = Project.framework(
     name: "Util",
     dependencies: [
         .Module.thirdPartyLib
-    ]
+    ],
+    resources: .default
 )

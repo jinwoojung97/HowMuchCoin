@@ -10,4 +10,4 @@ open:
 
 asset:
 	tuist generate
-	pod install
+#	pod install
