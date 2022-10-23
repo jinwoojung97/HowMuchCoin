@@ -17,7 +17,7 @@ public final class ListViewModel {
     public init(fetchCoinListUseCase: FetchCoinListUseCase){
         self.fetchCoinListUseCase = fetchCoinListUseCase
         
-        fetchCoinList()
+//        fetchCoinList()
     }
 
     func fetchCoinList() {
