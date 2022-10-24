@@ -14,4 +14,23 @@ extension Double{
 
         return (self * digit).rounded() / digit
     }
+    
+    public func decimalRound(_ num: Double) -> Double {
+        let digit: Double = pow(10, num)
+
+        return (self * digit).rounded() / digit
+    }
+
+    /// 조 단위 반환
+    public func trillionFormatter() -> String {
+        return "\((self / 1000000000000).decimalRound(4))T"
+    }
+
+    /// 1000 단위 (,) 넣기
+    public func numberFormatter() -> String {
+        let numberFormatter = NumberFormatter()
+        numberFormatter.numberStyle = .decimal
+        
+        return numberFormatter.string(from: NSNumber(value: self))!
+    }
 }

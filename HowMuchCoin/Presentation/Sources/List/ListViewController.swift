@@ -66,11 +66,44 @@ public final class ListViewController: UIViewController {
     let entryWrapper = UIView().then {
         $0.backgroundColor = .dynamicBackground
     }
-    
-    let entryLabel = UILabel().then{
-        $0.text = "항목이 들어갈 곳"
-        $0.font = .systemFont(ofSize: 15, weight: .regular)
+
+    let entryView = EntryView().then {
+        $0.backgroundColor = .dynamicGray
+    }
+
+    let rankingLabel = UILabel().then{
+        $0.text = "순위"
+        $0.font = .systemFont(ofSize: 13, weight: .bold)
         $0.textColor = .dynamicLabel
+        $0.textAlignment = .center
+    }
+
+    let nameLabel = UILabel().then{
+        $0.text = "종목"
+        $0.font = .systemFont(ofSize: 13, weight: .bold)
+        $0.textColor = .dynamicLabel
+        $0.textAlignment = .left
+    }
+
+    let priceLabel = UILabel().then{
+        $0.text = "가격(₩)"
+        $0.font = .systemFont(ofSize: 13, weight: .bold)
+        $0.textColor = .dynamicLabel
+        $0.textAlignment = .right
+    }
+
+    let percentChangeLabel = UILabel().then{
+        $0.text = "전일대비"
+        $0.font = .systemFont(ofSize: 13, weight: .bold)
+        $0.textColor = .dynamicLabel
+        $0.textAlignment = .right
+    }
+
+    let optionLabel = UILabel().then{
+        $0.text = "거래액(1D)"
+        $0.font = .systemFont(ofSize: 13, weight: .bold)
+        $0.textColor = .dynamicLabel
+        $0.textAlignment = .right
     }
 
     lazy var listTableView = UITableView().then {
@@ -78,41 +111,51 @@ public final class ListViewController: UIViewController {
         $0.tableHeaderView = headerStackView
         $0.tableHeaderView?.frame.size.height = 90
         $0.separatorColor = .systemGray
-//        $0.register(BookmarkCell.self, forCellReuseIdentifier: BookmarkCell.identifier)
+        $0.register(CoinCell.self, forCellReuseIdentifier: CoinCell.identifier)
+        $0.rowHeight = 44
         $0.dataSource = self
         $0.delegate = self
     }
 
     public override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = .dynamicBackground
         initialize()
     }
-    
+
     func initialize(){
         addComponent()
         setConstraints()
-        bind()
+        inputBind()
+        outputBind()
     }
     
     func addComponent(){
         [titleLabel, searchButton].forEach(titleWrapper.addSubview)
+
         searchWrapper.addSubview(searchTextField)
-        [entryLabel].forEach(entryWrapper.addSubview)
+
+        entryWrapper.addSubview(entryView)
+        entryView.rankView.addSubview(rankingLabel)
+        entryView.nameView.addSubview(nameLabel)
+        entryView.priceView.addSubview(priceLabel)
+        entryView.percentChangeView.addSubview(percentChangeLabel)
+        entryView.optionView.addSubview(optionLabel)
+
         [titleWrapper, searchWrapper, entryWrapper].forEach(headerStackView.addArrangedSubview)
         [listTableView].forEach(view.addSubview)
     }
     
     func setConstraints(){
         listTableView.snp.makeConstraints{
-            $0.edges.equalToSuperview()
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
 
         titleLabel.snp.makeConstraints{
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
         }
-        
+
         searchButton.snp.makeConstraints{
             $0.size.equalTo(50)
             $0.centerY.equalToSuperview()
@@ -133,21 +176,41 @@ public final class ListViewController: UIViewController {
         }
 
         entryWrapper.snp.makeConstraints{
-            $0.height.equalTo(40)
+            $0.height.equalTo(30)
         }
-        
-        entryLabel.snp.makeConstraints{
-            $0.center.equalToSuperview()
+
+        entryView.snp.makeConstraints{
+            $0.edges.equalToSuperview()
+        }
+
+        [rankingLabel, nameLabel, priceLabel, percentChangeLabel, optionLabel].forEach{ label in
+            label.snp.makeConstraints{
+                $0.center.equalToSuperview()
+            }
         }
     }
     
-    func bind() {
+    func inputBind() {
         searchButton.rx.tapGesture()
             .when(.recognized)
             .bind {[weak self] _ in
                 self?.searchWrapperShowAndHide()
             }
             .disposed(by: disposeBag)
+
+        optionLabel.rx.tapGesture()
+            .when(.recognized)
+            .bind {[weak self] _ in
+                Log.d("sss")
+            }
+            .disposed(by: disposeBag)
+    }
+    
+    func outputBind() {
+        viewModel.didItemFetched
+            .subscribe {[weak self] _ in
+                self?.listTableView.reloadData()
+            }.disposed(by: disposeBag)
     }
     
     func searchWrapperShowAndHide(){
@@ -162,13 +225,13 @@ public final class ListViewController: UIViewController {
 
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
+        return viewModel.coinList.count
     }
 
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell()
-        cell.backgroundColor = UIColor.dynamicBackground
-        cell.selectionStyle = .none
+        guard let cell = listTableView.dequeueReusableCell(withIdentifier: CoinCell.identifier) as? CoinCell else { return UITableViewCell() }
+
+        cell.dataBind(coin: viewModel.coinList[indexPath.row])
 
         return cell
     }
