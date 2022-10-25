@@ -23,7 +23,7 @@ extension Double{
 
     /// 조 단위 반환
     public func trillionFormatter() -> String {
-        return "\((self / 1000000000000).decimalRound(4))T"
+        return "\((self / 1000000000000).decimalRound())T"
     }
 
     /// 1000 단위 (,) 넣기

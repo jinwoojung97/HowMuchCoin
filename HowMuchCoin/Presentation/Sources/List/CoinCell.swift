@@ -115,6 +115,7 @@ public final class CoinCell: UITableViewCell{
 
         optionLabel.snp.makeConstraints{
             $0.centerY.trailing.equalToSuperview()
+            $0.trailing.equalToSuperview().inset(6)
         }
     }
     
