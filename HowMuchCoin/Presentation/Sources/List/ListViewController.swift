@@ -106,6 +106,14 @@ public final class ListViewController: UIViewController {
         $0.textAlignment = .right
     }
 
+    let percentChangeSideMenuView = SideMenuView(frame: .zero, type: .percentChange).then{
+        $0.isHidden = false
+    }
+    
+    let optionSideMenuView = SideMenuView(frame: .zero, type: .option).then{
+        $0.isHidden = false
+    }
+
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .dynamicBackground
         $0.tableHeaderView = headerStackView
@@ -143,7 +151,7 @@ public final class ListViewController: UIViewController {
         entryView.optionView.addSubview(optionLabel)
 
         [titleWrapper, searchWrapper, entryWrapper].forEach(headerStackView.addArrangedSubview)
-        [listTableView].forEach(view.addSubview)
+        [listTableView, percentChangeSideMenuView, optionSideMenuView].forEach(view.addSubview)
     }
     
     func setConstraints(){
@@ -188,6 +196,18 @@ public final class ListViewController: UIViewController {
                 $0.center.equalToSuperview()
             }
         }
+
+        percentChangeSideMenuView.snp.makeConstraints{
+            $0.top.equalTo(entryView.snp.bottom)
+            $0.centerX.equalTo(percentChangeLabel)
+            $0.width.equalTo(entryView.percentChangeView)
+        }
+
+        optionSideMenuView.snp.makeConstraints{
+            $0.top.equalTo(entryView.snp.bottom)
+            $0.centerX.equalTo(optionLabel)
+            $0.width.equalTo(entryView.optionView)
+        }
     }
     
     func inputBind() {
@@ -198,10 +218,19 @@ public final class ListViewController: UIViewController {
             }
             .disposed(by: disposeBag)
 
+        percentChangeLabel.rx.tapGesture()
+            .when(.recognized)
+            .bind {[weak self] _ in
+                guard let self = self else { return }
+                self.percentChangeSideMenuView.isHidden = !self.percentChangeSideMenuView.isHidden
+            }
+            .disposed(by: disposeBag)
+
         optionLabel.rx.tapGesture()
             .when(.recognized)
             .bind {[weak self] _ in
-                Log.d("sss")
+                guard let self = self else { return }
+                self.optionSideMenuView.isHidden = !self.optionSideMenuView.isHidden
             }
             .disposed(by: disposeBag)
     }
