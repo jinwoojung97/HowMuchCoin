@@ -36,23 +36,23 @@ public final class SideMenuView: UIView {
         initialize()
     }
 
-    func initialize(){
+    private func initialize(){
         addComponent()
         setConstraints()
         makeMenus()
     }
 
-    func addComponent(){
+    private func addComponent(){
         self.addSubview(stackView)
     }
 
-    func setConstraints(){
+    private func setConstraints(){
         stackView.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
     }
     
-    func makeMenus(){
+    private func makeMenus(){
         type.menus.forEach{[weak self] menu in
             let sideMenu = SideMenu(frame: .zero, menu: menu)
             stackView.addArrangedSubview(sideMenu)
@@ -64,28 +64,6 @@ public final class SideMenuView: UIView {
             sideMenu.tapAction = { tapMenu in
                 self?.menuTapped.onNext(tapMenu)
             }
-        }
-    }
-}
-
-public enum SideMenuType {
-    case percentChange
-    case option
-
-    var menus: [SortBy]{
-        switch self{
-        case .percentChange:
-            return [.percentChange1HAsc,
-                    .percentChange1HDesc,
-                    .percentChange24HAsc,
-                    .percentChange24HDesc,
-                    .percentChange7DAsc,
-                    .percentChange7DDesc]
-        case .option:
-            return [.marketCapAsc,
-                    .marketCapDesc,
-                    .volume24HAsc,
-                    .volume24HDesc]
         }
     }
 }
@@ -128,42 +106,5 @@ public final class SideMenu: UIView {
                 guard let self = self else { return }
                 self.tapAction?(self.menu)
             }.disposed(by: disposeBag)
-    }
-}
-
-public enum SortBy {
-    case initialState
-    /*
-     percentChange
-     */
-    case percentChange1HAsc
-    case percentChange1HDesc
-    case percentChange24HAsc
-    case percentChange24HDesc
-    case percentChange7DAsc
-    case percentChange7DDesc
-
-    /*
-     option
-     */
-    case marketCapAsc
-    case marketCapDesc
-    case volume24HAsc
-    case volume24HDesc
-
-    var word: String{
-        switch self{
-        case .initialState: return ""
-        case .percentChange1HAsc: return "전시간대비-"
-        case .percentChange1HDesc: return "전시간대비+"
-        case .percentChange24HAsc: return "전일대비-"
-        case .percentChange24HDesc: return "전일대비+"
-        case .percentChange7DAsc: return "전주대비-"
-        case .percentChange7DDesc: return "전주대비+"
-        case .marketCapAsc: return "총 시가-"
-        case .marketCapDesc: return "총 시가+"
-        case .volume24HAsc: return "거래액(1D)-"
-        case .volume24HDesc: return "거래액(1D)+"
-        }
     }
 }

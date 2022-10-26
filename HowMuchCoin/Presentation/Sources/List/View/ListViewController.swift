@@ -135,14 +135,14 @@ public final class ListViewController: UIViewController {
         initialize()
     }
 
-    func initialize(){
+    private func initialize(){
         addComponent()
         setConstraints()
         inputBind()
         outputBind()
     }
     
-    func addComponent(){
+    private func addComponent(){
         [titleLabel, searchButton].forEach(titleWrapper.addSubview)
 
         searchWrapper.addSubview(searchTextField)
@@ -158,7 +158,7 @@ public final class ListViewController: UIViewController {
         [listTableView, percentChangeSideMenuView, optionSideMenuView, topSafeAreaView].forEach(view.addSubview)
     }
     
-    func setConstraints(){
+    private func setConstraints(){
         topSafeAreaView.snp.makeConstraints{
             $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
@@ -218,8 +218,21 @@ public final class ListViewController: UIViewController {
             $0.width.equalTo(entryView.optionView)
         }
     }
-    
-    func inputBind() {
+
+    private func searchWrapperShowAndHide(){
+        if searchWrapper.isHidden {
+            searchWrapper.animShow()
+        }else {
+            searchWrapper.animHide()
+        }
+        listTableView.setAndLayoutTableHeaderView(header: headerStackView)
+    }
+}
+
+// MARK: - Bind
+extension ListViewController {
+    /// Input
+    private func inputBind() {
         searchButton.rx.tapGesture()
             .when(.recognized)
             .bind {[weak self] _ in
@@ -259,24 +272,17 @@ public final class ListViewController: UIViewController {
             self?.viewModel.sortList(sortBy: menu)
         }).disposed(by: disposeBag)
     }
-    
-    func outputBind() {
+
+    /// OutPut
+    private func outputBind() {
         viewModel.didItemFetched
             .subscribe {[weak self] _ in
                 self?.listTableView.reloadData()
             }.disposed(by: disposeBag)
     }
-
-    func searchWrapperShowAndHide(){
-        if searchWrapper.isHidden {
-            searchWrapper.animShow()
-        }else {
-            searchWrapper.animHide()
-        }
-        listTableView.setAndLayoutTableHeaderView(header: headerStackView)
-    }
 }
 
+// MARK: -TableView
 extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return viewModel.coinList.count

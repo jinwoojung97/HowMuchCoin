@@ -45,16 +45,16 @@ public final class EntryView: UIView {
         initialize()
     }
 
-    func initialize(){
+    private func initialize(){
         addComponent()
         setConstraints()
     }
 
-    func addComponent(){
+    private func addComponent(){
         [rankView, nameView, priceView, percentChangeView, optionView].forEach(self.addSubview)
     }
 
-    func setConstraints(){
+    private func setConstraints(){
         // MARK: - View
         rankView.snp.makeConstraints{
             $0.top.bottom.equalToSuperview()
@@ -88,7 +88,7 @@ public final class EntryView: UIView {
     }
 }
 
-public enum Entry{
+private enum Entry{
     case rank
     case name
     case price

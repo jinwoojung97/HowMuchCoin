@@ -68,13 +68,13 @@ public final class CoinCell: UITableViewCell{
         fatalError("init(coder:) has not been implemented")
     }
 
-    func initialize() {
+    private func initialize() {
         self.selectionStyle = .none
         addComponent()
         setConstraints()
     }
 
-    func addComponent() {
+    private func addComponent() {
         contentView.addSubview(entryView)
 
         entryView.rankView.addSubview(rankingLabel)
@@ -85,7 +85,7 @@ public final class CoinCell: UITableViewCell{
         entryView.optionView.addSubview(optionLabel)
     }
 
-    func setConstraints() {
+    private func setConstraints() {
         entryView.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
