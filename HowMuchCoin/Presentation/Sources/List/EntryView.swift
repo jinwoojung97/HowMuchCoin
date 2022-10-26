@@ -12,6 +12,7 @@ import Util
 
 import SnapKit
 import Then
+
 /// 항목별로 비율이 나뉘어져 있음
 public final class EntryView: UIView {
     let rankView = UIView().then {

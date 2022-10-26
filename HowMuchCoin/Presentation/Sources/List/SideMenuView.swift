@@ -18,6 +18,7 @@ import RxGesture
 public final class SideMenuView: UIView {
 
     var type : SideMenuType!
+    var menuTapped : PublishSubject<SortBy> = .init()
 
     let stackView = UIStackView().then {
         $0.axis = .vertical
@@ -52,12 +53,16 @@ public final class SideMenuView: UIView {
     }
     
     func makeMenus(){
-        type.menus.forEach{ menu in
+        type.menus.forEach{[weak self] menu in
             let sideMenu = SideMenu(frame: .zero, menu: menu)
             stackView.addArrangedSubview(sideMenu)
 
             sideMenu.snp.makeConstraints{
                 $0.height.equalTo(30)
+            }
+
+            sideMenu.tapAction = { tapMenu in
+                self?.menuTapped.onNext(tapMenu)
             }
         }
     }
@@ -89,7 +94,7 @@ public final class SideMenu: UIView {
 
     var menu : SortBy!
     var disposeBag = DisposeBag()
-    var menuTapped : PublishSubject<SortBy> = .init()
+    var tapAction : ((SortBy) -> Void)?
 
     let label = UILabel().then {
         $0.font = .systemFont(ofSize: 13, weight: .bold)
@@ -119,13 +124,15 @@ public final class SideMenu: UIView {
 
         self.rx.tapGesture()
             .when(.recognized)
-            .bind{ _ in
-                Log.d(self.menu.word)
+            .bind{[weak self] _ in
+                guard let self = self else { return }
+                self.tapAction?(self.menu)
             }.disposed(by: disposeBag)
     }
 }
 
 public enum SortBy {
+    case initialState
     /*
      percentChange
      */
@@ -146,6 +153,7 @@ public enum SortBy {
 
     var word: String{
         switch self{
+        case .initialState: return ""
         case .percentChange1HAsc: return "전시간대비-"
         case .percentChange1HDesc: return "전시간대비+"
         case .percentChange24HAsc: return "전일대비-"

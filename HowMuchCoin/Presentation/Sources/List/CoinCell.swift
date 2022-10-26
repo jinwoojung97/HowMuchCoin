@@ -118,16 +118,36 @@ public final class CoinCell: UITableViewCell{
             $0.trailing.equalToSuperview().inset(6)
         }
     }
-    
-    func dataBind(coin: Coin) {
-        rankingLabel.text = "\(coin.rank)"
+
+    func dataBind(coin: Coin, sortBy: SortBy) {
+        let percentChangeValue : Double
+        let optionValue : Double
+
+        switch sortBy{
+        case .initialState, .percentChange24HAsc, .percentChange24HDesc,
+                .volume24HAsc, .volume24HDesc:
+            percentChangeValue = coin.quotes.priceInfo.percentChange24h
+            optionValue = coin.quotes.priceInfo.volume24h
+        case .percentChange1HAsc, .percentChange1HDesc:
+            percentChangeValue = coin.quotes.priceInfo.percentChange1h
+            optionValue = coin.quotes.priceInfo.volume24h
+        case .percentChange7DAsc, .percentChange7DDesc:
+            percentChangeValue = coin.quotes.priceInfo.percentChange7d
+            optionValue = coin.quotes.priceInfo.volume24h
+        case .marketCapAsc, .marketCapDesc:
+            percentChangeValue = coin.quotes.priceInfo.percentChange1h
+            optionValue = coin.quotes.priceInfo.marketCap
+        }
+
+        /// Text Setting
+        percentChangeLabel.text = "\(percentChangeValue)%"
+        optionLabel.text = optionValue.trillionFormatter()
         nameLabel.text = "\(coin.name)"
         symbolLabel.text = "\(coin.symbol)/KRW"
         priceLabel.text = coin.quotes.priceInfo.price.numberFormatter()
-        percentChangeLabel.text = "\(coin.quotes.priceInfo.percentChange24h)%"
-        optionLabel.text = coin.quotes.priceInfo.volume24h.trillionFormatter()
 
-        let textColor: UIColor = coin.quotes.priceInfo.percentChange24h > 0 ? .systemRed : .systemBlue
+        /// Text Color Setting
+        let textColor: UIColor = percentChangeValue > 0 ? .systemRed : .systemBlue
         [priceLabel, percentChangeLabel].forEach{
             $0.textColor = textColor
         }

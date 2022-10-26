@@ -29,6 +29,10 @@ public final class ListViewController: UIViewController {
     }
 
     // MARK: - Components
+    let topSafeAreaView = UIView().then {
+        $0.backgroundColor = .dynamicBackground
+    }
+    
     let headerStackView = UIStackView().then {
         $0.backgroundColor = .white
         $0.axis = .vertical
@@ -107,11 +111,11 @@ public final class ListViewController: UIViewController {
     }
 
     let percentChangeSideMenuView = SideMenuView(frame: .zero, type: .percentChange).then{
-        $0.isHidden = false
+        $0.isHidden = true
     }
-    
+
     let optionSideMenuView = SideMenuView(frame: .zero, type: .option).then{
-        $0.isHidden = false
+        $0.isHidden = true
     }
 
     lazy var listTableView = UITableView().then {
@@ -151,10 +155,15 @@ public final class ListViewController: UIViewController {
         entryView.optionView.addSubview(optionLabel)
 
         [titleWrapper, searchWrapper, entryWrapper].forEach(headerStackView.addArrangedSubview)
-        [listTableView, percentChangeSideMenuView, optionSideMenuView].forEach(view.addSubview)
+        [listTableView, percentChangeSideMenuView, optionSideMenuView, topSafeAreaView].forEach(view.addSubview)
     }
     
     func setConstraints(){
+        topSafeAreaView.snp.makeConstraints{
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+
         listTableView.snp.makeConstraints{
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
@@ -217,7 +226,7 @@ public final class ListViewController: UIViewController {
                 self?.searchWrapperShowAndHide()
             }
             .disposed(by: disposeBag)
-
+        
         percentChangeLabel.rx.tapGesture()
             .when(.recognized)
             .bind {[weak self] _ in
@@ -233,6 +242,22 @@ public final class ListViewController: UIViewController {
                 self.optionSideMenuView.isHidden = !self.optionSideMenuView.isHidden
             }
             .disposed(by: disposeBag)
+
+        percentChangeSideMenuView.menuTapped.subscribe(onNext: {[weak self] menu in
+            self?.percentChangeSideMenuView.isHidden = true
+            self?.optionSideMenuView.isHidden = true
+            self?.percentChangeLabel.text = menu.word
+            self?.optionLabel.text = "거래액(1D)"
+            self?.viewModel.sortList(sortBy: menu)
+        }).disposed(by: disposeBag)
+
+        optionSideMenuView.menuTapped.subscribe(onNext: {[weak self] menu in
+            self?.percentChangeSideMenuView.isHidden = true
+            self?.optionSideMenuView.isHidden = true
+            self?.percentChangeLabel.text = "전일대비"
+            self?.optionLabel.text = menu.word
+            self?.viewModel.sortList(sortBy: menu)
+        }).disposed(by: disposeBag)
     }
     
     func outputBind() {
@@ -241,7 +266,7 @@ public final class ListViewController: UIViewController {
                 self?.listTableView.reloadData()
             }.disposed(by: disposeBag)
     }
-    
+
     func searchWrapperShowAndHide(){
         if searchWrapper.isHidden {
             searchWrapper.animShow()
@@ -260,7 +285,9 @@ extension ListViewController: UITableViewDataSource, UITableViewDelegate {
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = listTableView.dequeueReusableCell(withIdentifier: CoinCell.identifier) as? CoinCell else { return UITableViewCell() }
 
-        cell.dataBind(coin: viewModel.coinList[indexPath.row])
+        cell.dataBind(coin: viewModel.coinList[indexPath.row],
+                      sortBy: viewModel.sortBy)
+        cell.rankingLabel.text = "\(indexPath.row + 1)"
 
         return cell
     }
