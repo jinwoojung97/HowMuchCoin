@@ -121,7 +121,7 @@ public final class ListViewController: UIViewController {
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .dynamicBackground
         $0.tableHeaderView = headerStackView
-        $0.tableHeaderView?.frame.size.height = 90
+        $0.tableHeaderView?.frame.size.height = 70
         $0.separatorColor = .systemGray
         $0.register(CoinCell.self, forCellReuseIdentifier: CoinCell.identifier)
         $0.rowHeight = 44
@@ -168,6 +168,10 @@ public final class ListViewController: UIViewController {
             $0.edges.equalTo(view.safeAreaLayoutGuide)
         }
 
+        headerStackView.snp.makeConstraints{
+            $0.width.equalTo(view)
+        }
+
         titleLabel.snp.makeConstraints{
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().inset(12)
@@ -180,7 +184,7 @@ public final class ListViewController: UIViewController {
         }
 
         titleWrapper.snp.makeConstraints{
-            $0.height.equalTo(50)
+            $0.height.equalTo(40)
         }
 
         searchWrapper.snp.makeConstraints{
