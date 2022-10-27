@@ -256,7 +256,7 @@ extension ListViewController {
 
         reFetchButton.rx.tapGesture()
             .when(.recognized)
-            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .throttle(.seconds(2), latest: false, scheduler: MainScheduler.instance)
             .bind {[weak self] _ in
                 self?.viewModel.sortBy = .initialState
                 self?.viewModel.fetchCoinList()
