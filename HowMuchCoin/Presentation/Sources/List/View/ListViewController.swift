@@ -47,7 +47,12 @@ public final class ListViewController: UIViewController {
         $0.textColor = .dynamicLabel
         $0.font = .systemFont(ofSize: 32, weight: .bold)
     }
-    
+
+    let reFetchButton = UIButton().then {
+        $0.roundCorners(.allCorners, radius: 25)
+        $0.setImage(UIImage(systemName: "arrow.clockwise"), for: .normal)
+    }
+
     let searchButton = UIButton().then {
         $0.roundCorners(.allCorners, radius: 25)
         $0.setImage(UIImage(systemName: "magnifyingglass"), for: .normal)
@@ -121,7 +126,7 @@ public final class ListViewController: UIViewController {
     lazy var listTableView = UITableView().then {
         $0.backgroundColor = .dynamicBackground
         $0.tableHeaderView = headerStackView
-        $0.tableHeaderView?.frame.size.height = 70
+        $0.tableHeaderView?.frame.size.height = 80
         $0.separatorColor = .systemGray
         $0.register(CoinCell.self, forCellReuseIdentifier: CoinCell.identifier)
         $0.rowHeight = 44
@@ -143,7 +148,7 @@ public final class ListViewController: UIViewController {
     }
     
     private func addComponent(){
-        [titleLabel, searchButton].forEach(titleWrapper.addSubview)
+        [titleLabel, searchButton, reFetchButton].forEach(titleWrapper.addSubview)
 
         searchWrapper.addSubview(searchTextField)
 
@@ -183,8 +188,14 @@ public final class ListViewController: UIViewController {
             $0.trailing.equalToSuperview().inset(12)
         }
 
+        reFetchButton.snp.makeConstraints{
+            $0.size.equalTo(50)
+            $0.centerY.equalToSuperview()
+            $0.trailing.equalTo(searchButton.snp.leading)
+        }
+
         titleWrapper.snp.makeConstraints{
-            $0.height.equalTo(40)
+            $0.height.equalTo(50)
         }
 
         searchWrapper.snp.makeConstraints{
@@ -237,13 +248,32 @@ public final class ListViewController: UIViewController {
 extension ListViewController {
     /// Input
     private func inputBind() {
+        view.rx.tapGesture()
+            .when(.recognized)
+            .filter{[weak self] _ in (self?.searchTextField.isFirstResponder)! }
+            .bind{[weak self] _ in self?.searchTextField.resignFirstResponder() }
+            .disposed(by: disposeBag)
+
+        reFetchButton.rx.tapGesture()
+            .when(.recognized)
+            .throttle(.seconds(2), scheduler: MainScheduler.instance)
+            .bind {[weak self] _ in
+                self?.viewModel.sortBy = .initialState
+                self?.viewModel.fetchCoinList()
+                self?.percentChangeSideMenuView.isHidden = true
+                self?.optionSideMenuView.isHidden = true
+                self?.optionLabel.text = "거래액(1D)"
+                self?.percentChangeLabel.text = "전일대비"
+            }
+            .disposed(by: disposeBag)
+
         searchButton.rx.tapGesture()
             .when(.recognized)
             .bind {[weak self] _ in
                 self?.searchWrapperShowAndHide()
             }
             .disposed(by: disposeBag)
-        
+
         percentChangeLabel.rx.tapGesture()
             .when(.recognized)
             .bind {[weak self] _ in
@@ -275,6 +305,15 @@ extension ListViewController {
             self?.optionLabel.text = menu.word
             self?.viewModel.sortList(sortBy: menu)
         }).disposed(by: disposeBag)
+        
+        searchTextField.rx.text
+            .orEmpty
+            .distinctUntilChanged()
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .skip(1)
+            .subscribe{[weak self] text in
+                self?.viewModel.searchList(word: text)
+            }.disposed(by: disposeBag)
     }
 
     /// OutPut
